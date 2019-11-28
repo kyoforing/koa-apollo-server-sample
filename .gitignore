@@ -1,0 +1,4 @@
+.vscode-janus-debug
+node_modules
+dist/**/*.js
+dist/**/*.map

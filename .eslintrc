@@ -1,0 +1,20 @@
+{
+  "parser": "babel-eslint", 
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "consistent-return": "off",
+    "no-param-reassign": "off",
+    "no-console": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true
+      }
+    ]
+  }
+}
