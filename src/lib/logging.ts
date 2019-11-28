@@ -31,7 +31,7 @@ koa_morgan.compile = originalMorgan.compile
 koa_morgan.format = originalMorgan.format
 koa_morgan.token = originalMorgan.token
 
-//Collect log message to morgan
+//Collect log message to koa-morgan
 let logger = (tokens, req, res) => {
   //IP check
   let user_ip: string = '';

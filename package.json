@@ -6,7 +6,6 @@
     "url": "https://github.com/kyoforing/koa-apollo-server-sample"
   },
   "scripts": {
-    "clean": "rimraf dist",
     "start": "npm run build:live",
     "start-dev": "./node_modules/.bin/better-npm-run start-dev",
     "start-prod": "./node_modules/.bin/better-npm-run start-prod",
