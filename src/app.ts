@@ -2,10 +2,10 @@
 
 const Koa = require('koa');
 const helmet = require('koa-helmet');
-const cors = require('koa-cors');
 const dotenv = require('dotenv');
 const { ApolloServer, gql } = require('apollo-server-koa');
-const graphqlLog = require('./lib/logging');
+const { gqlLogger, userLogger } = require('./lib/logger');
+const { cors } = require('./lib/cors');
 
 const env = process.env.NODE_ENV || 'development';
 const app = new Koa();
@@ -26,32 +26,11 @@ const resolvers = {
   },
 };
 
-// API Log setting
-app.use(graphqlLog.koa_morgan((tokens, req, res) => graphqlLog.logger(tokens, req, res)));
+// API Logger
+app.use(userLogger());
 
-// CORS setting
-const options = {
-  origin: function(ctx) {
-      let origin = ctx.req.headers.origin || '';
-      let allowDomain: string = 'http://localhost:8080';
-      let whiteList = [];
-
-      //Multiple CORS domain
-      whiteList = process.env.WHITE_LIST.split(',');
-
-      whiteList.forEach(domain => {
-          if (origin.includes(domain)) {
-              allowDomain = origin;
-          }
-      });
-
-      return allowDomain;
-  },
-  allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-  credentials: true,
-  methods: ['GET', 'PUT', 'POST', 'DELETE']
-};
-app.use(cors(options));
+// CORS
+app.use(cors());
 
 // Security setting
 app.use(helmet());
@@ -65,7 +44,7 @@ app.use(async (ctx, next) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  extensions: [() => new graphqlLog.BasicLogging()],
+  extensions: [() => new gqlLogger()],
 });
 
 server.applyMiddleware({ app });

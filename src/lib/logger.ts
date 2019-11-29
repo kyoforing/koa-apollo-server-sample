@@ -2,7 +2,7 @@ const originalMorgan = require('morgan')
 const uaParser = require('ua-parser-js');
 
 //Apollo GraphQL Log
-class BasicLogging {
+class gqlLogger {
   requestDidStart({ queryString, variables }) {
     const query = queryString;
     console.log('GraphQL request log:');
@@ -15,9 +15,11 @@ class BasicLogging {
   }
 }
 
+const userLogger = () => koa_morgan((tokens, req, res) => getUserLog(tokens, req, res));
+
 //morgan => koa-morgan
-function koa_morgan(format, options) {
-  const fn = originalMorgan(format, options)
+function koa_morgan(format) {
+  const fn = originalMorgan(format)
   return (ctx, next) => {
     return new Promise((resolve, reject) => {
       fn(ctx.req, ctx.res, (err) => {
@@ -32,7 +34,7 @@ koa_morgan.format = originalMorgan.format
 koa_morgan.token = originalMorgan.token
 
 //Collect log message to koa-morgan
-let logger = (tokens, req, res) => {
+const getUserLog = (tokens, req, res) => {
   //IP check
   let user_ip: string = '';
   if (req.headers['x-forwarded-for']) {
@@ -74,6 +76,4 @@ let logger = (tokens, req, res) => {
   return logArr.join(' ');
 }
 
-module.exports.logger = logger;
-module.exports.koa_morgan = koa_morgan;
-module.exports.BasicLogging = BasicLogging;
+export { gqlLogger, userLogger }
