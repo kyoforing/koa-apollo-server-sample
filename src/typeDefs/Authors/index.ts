@@ -4,6 +4,7 @@ const authorType = gql`
   type Author {
     author_id: ID
     name: String
+    posts: [Post]
   }
 
   input addAuthor {
@@ -12,11 +13,7 @@ const authorType = gql`
 
   input updAuthor {
     author_id: ID!
-    name: String!
-  }
-
-  type resp {
-    status: String
+    name: String
   }
 `;
 

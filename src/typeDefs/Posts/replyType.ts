@@ -4,7 +4,9 @@ const replyType = gql`
   type Reply {
     reply_id: ID
     post_id: Int
-    content: String
+    title: String
+    text: String
+    author_id: Int
     author: Author
   }
 `;

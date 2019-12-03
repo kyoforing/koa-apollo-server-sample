@@ -8,9 +8,7 @@ const getAuthor = async author_id => {
 
   let author = await authorsSql
     .then(rows => rows.length > 0 ? rows[0] : {})
-    .catch(function (error) {
-      throw error;
-    });
+    .catch(error => { throw error });
   return author;
 };
 
@@ -19,9 +17,7 @@ const getAuthors = async (limit = 10, page = 1) => {
     .select(knex.raw('count(1) AS count'));
   let authorCount = await authorsSql
     .then(rows => rows.length > 0 ? rows[0].count : 0)
-    .catch(function (error) {
-      throw error;
-    });
+    .catch(error => { throw error });
 
   let pages = Math.ceil(authorCount / limit);
   page = page > pages ? pages : page
@@ -36,9 +32,7 @@ const getAuthors = async (limit = 10, page = 1) => {
 
   let authors = await authorsSql
     .then(rows => rows)
-    .catch(function (error) {
-      throw error;
-    });
+    .catch(error => { throw error });
   return authors;
 };
 
@@ -51,10 +45,8 @@ const addAuthor = async args => {
 
   let author_id = await addAuthorSql
     .then(rows => (rows.length > 0 ? rows[0] : null))
-    .catch(function (error) {
-      throw error;
-    });
-  let result = { name, author_id };
+    .catch(error => { throw error });
+  let result = { author_id, name };
 
   return result;
 };
@@ -68,12 +60,9 @@ const updAuthor = async args => {
 
   let updAuthorRlt = await updAuthorSql
     .then(rows => rows)
-    .catch(function (error) {
-      throw error;
-    });
-  console.log(updAuthorRlt);
+    .catch(error => { throw error });
   let result = { status: updAuthorRlt ? 'success' : 'no affected' };
-  
+
   return result;
 };
 
@@ -85,9 +74,7 @@ const delAuthor = async author_id => {
 
   let delAuthorRlt = await delAuthorSql
     .then(rows => rows)
-    .catch(function (error) {
-      throw error;
-    });
+    .catch(error => { throw error });
   let result = { status: delAuthorRlt ? 'success' : 'no affected' };
 
   return result;
