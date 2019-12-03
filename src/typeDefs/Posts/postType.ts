@@ -1,8 +1,8 @@
 const { gql } = require('apollo-server-koa');
 
 const postType = gql`
-  type Post {
-    post_id: ID
+  type Post implements Node {
+    id: ID!
     title: String
     text: String
     replys: [Reply]
@@ -10,14 +10,14 @@ const postType = gql`
     author: Author
   }
 
-  input addPost {
+  input AddPost {
     author_id: ID!
     title: String
     text: String
   }
 
-  input updPost {
-    post_id: ID!
+  input UpdPost {
+    id: ID!
     author_id: ID!
     title: String
     text: String

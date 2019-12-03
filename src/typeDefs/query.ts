@@ -1,4 +1,4 @@
-  
+
 const { gql } = require('apollo-server-koa');
 
 const query = gql`
@@ -13,12 +13,12 @@ const query = gql`
 
 const mutation = gql`
   type Mutation {
-    addAuthor(input: addAuthor): Author
-    updAuthor(input: updAuthor): apiResp
-    delAuthor(author_id: ID!): apiResp
-    addPost(input: addPost): Post
-    updPost(input: updPost): apiResp
-    delPost(post_id: ID!, author_id: ID!): apiResp    
+    addAuthor(input: AddAuthor): Author
+    updAuthor(input: UpdAuthor): apiResp
+    delAuthor(id: ID!): apiResp
+    addPost(input: AddPost): Post
+    updPost(input: UpdPost): apiResp
+    delPost(id: ID!, author_id: ID!): apiResp    
   }
 `;
 
@@ -28,4 +28,10 @@ const publicType = gql`
   }
 `;
 
-export { publicType, query, mutation }
+const publicIFace = gql`
+  interface Node {
+    id: ID!
+  }
+`;
+
+export { publicType, publicIFace, query, mutation }

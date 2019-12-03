@@ -1,8 +1,8 @@
 const { gql } = require('apollo-server-koa');
 
 const replyType = gql`
-  type Reply {
-    reply_id: ID
+  type Reply implements Node {
+    id: ID!
     post_id: Int
     title: String
     text: String

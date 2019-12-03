@@ -8,11 +8,11 @@ const loaders = {
 
 const postResolver = {
   Query: {
-    post: (_source, { post_id }) => getPost(post_id), //Promise or Object
+    post: (_source, { id }) => getPost(id), //Promise or Object
     posts: (_source, { limit, page }) => getPosts(limit, page),
   },
   Mutation: {
-    // DataLoader
+    //DataLoader
     addPost: (_source, args) => {
       loaders.postsByAuthor.clear(+args.input.author_id);
       return addPost(args)
@@ -21,9 +21,9 @@ const postResolver = {
       loaders.postsByAuthor.clear(+args.input.author_id);
       return updPost(args)
     },
-    delPost: (_source, { post_id, author_id }) => {
+    delPost: (_source, { id, author_id }) => {
       loaders.postsByAuthor.clear(+author_id);
-      return delPost(post_id)
+      return delPost(id)
     },
   },
   Post: {
@@ -32,7 +32,7 @@ const postResolver = {
   },
   Author : {
     //posts: (obj) => getPostsByAuthor(obj.author_id),
-    posts: (obj) => loaders.postsByAuthor.load(obj.author_id)   // DataLoader
+    posts: (obj) => loaders.postsByAuthor.load(obj.id)   //For DataLoader
   }
 };
 
@@ -41,7 +41,7 @@ const replyResolver = {
     replys: (_source, args) => getReply(args),
   },
   Reply: {
-    author: (obj) => getAuthor(obj.author_id),
+    author: (obj) => getAuthor(obj.id),
   }
 };
 

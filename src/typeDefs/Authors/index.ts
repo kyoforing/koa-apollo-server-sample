@@ -1,18 +1,18 @@
 const { gql } = require('apollo-server-koa');
 
 const authorType = gql`
-  type Author {
-    author_id: ID
+  type Author implements Node {
+    id: ID!
     name: String
     posts: [Post]
   }
 
-  input addAuthor {
+  input AddAuthor {
     name: String!
   }
 
-  input updAuthor {
-    author_id: ID!
+  input UpdAuthor {
+    id: ID!
     name: String
   }
 `;

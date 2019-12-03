@@ -3,7 +3,7 @@ const { filter, isArray } = require('lodash');
 
 const getPost = async post_id => {
   let postsSql = knex('posts')
-    .select('post_id')
+    .select({ id: 'post_id'})
     .select('author_id')
     .select('title')
     .select('text')
@@ -28,7 +28,7 @@ const getPosts = async (limit = 10, page = 1) => {
 
   postsSql
     .clearSelect()
-    .select('post_id')
+    .select({ id: 'post_id'})
     .select('author_id')
     .select('title')
     .select('text')
@@ -48,19 +48,19 @@ const addPost = async args => {
   const addPostSql = knex('posts')
     .insert(post);
 
-  let post_id = await addPostSql
+  let id = await addPostSql
     .then(rows => (rows.length > 0 ? rows[0] : null))
     .catch(error => { throw error });
-  let result = { post_id, title, text };
+  let result = { id, title, text };
 
   return result;
 };
 
 const updPost = async args => {
-  const { post_id, title, text } = args.input;
+  const { id, title, text } = args.input;
 
   const updPostSql = knex('posts')
-    .where('post_id', post_id);
+    .where('post_id', id);
 
   if (title !== undefined) updPostSql.update('title', title);
   if (text !== undefined) updPostSql.update('text', text);
@@ -73,10 +73,10 @@ const updPost = async args => {
   return result;
 };
 
-const delPost = async post_id => {
+const delPost = async id => {
   const delpostSql = knex('posts')
     .delete()
-    .where('post_id', post_id)
+    .where('post_id', id)
     .then(rows => rows);
 
   let delpostRlt = await delpostSql
@@ -89,21 +89,21 @@ const delPost = async post_id => {
 
 const getReply = post_id => {
   let reply: any = [{
-    reply_id: 1,
+    id: 1,
     post_id: 1,
     title: 'test reply 1 title',
     text: 'test reply 1 text',
     author_id: 1
   },
   {
-    reply_id: 2,
+    id: 2,
     post_id: 1,
     title: 'test reply 2 title',
     text: 'test reply 2 text',
     author_id: 2
   },
   {
-    reply_id: 3,
+    id: 3,
     post_id: 2,
     title: 'test reply 3 title',
     text: 'test reply 3 text',
@@ -117,8 +117,8 @@ const getReply = post_id => {
 
 const getPostsByAuthor = async author_id => {
   let postsSql = knex('posts')
+    .select({ id: 'post_id'})
     .select('author_id')
-    .select('post_id')
     .select('title')
     .select('text')
     .orderBy('author_id');
