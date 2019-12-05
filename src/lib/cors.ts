@@ -15,7 +15,8 @@ const options = {
             }
         });
 
-        return allowDomain;
+        return origin; //Bypass
+        //return allowDomain;
     },
     allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
     credentials: true,
