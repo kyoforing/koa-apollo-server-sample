@@ -11,6 +11,9 @@ $ yarn start
 
 + Step 4: Open http://localhost:8080/graphql
 
+sligth front-end Demo
+https://codesandbox.io/s/mystifying-ellis-863oe
+
 Reference: 
 1. https://www.apollographql.com/docs/apollo-server/
 2. https://github.com/Shopify/graphql-design-tutorial/blob/master/TUTORIAL.md
