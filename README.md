@@ -11,7 +11,7 @@ $ yarn start
 
 + Step 4: Open http://localhost:8080/graphql
 
-sligth front-end Demo
+slight front-end demo
 https://codesandbox.io/s/mystifying-ellis-863oe
 
 Reference: 
