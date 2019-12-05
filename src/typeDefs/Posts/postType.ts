@@ -5,23 +5,40 @@ const postType = gql`
     id: ID!
     title: String
     text: String
-    replys: [Reply]
-    author_id: Int
-    author: Author
+    replies: [Reply!]
+    author: Author,
+    status: CollectionPostStatus
   }
 
-  input AddPost {
-    author_id: ID!
+  type Posts {
+    page: pagination
+    list: [Post!]
+  }
+
+  type PostCreatePayload {
+    userErrors: [UserError!]!
+    post: Post
+  }
+
+  type PostUpdatePayload {
+    userErrors: [UserError!]!
+    post: Post
+  }
+
+  type PostDeletePayload {
+    userErrors: [UserError!]!
+    status: String
+  }
+
+  input PostInput {
     title: String
     text: String
   }
 
-  input UpdPost {
-    id: ID!
-    author_id: ID!
-    title: String
-    text: String
-  }  
+  enum CollectionPostStatus {
+    DRAFT
+    PUBLIC
+  }
 `;
 
 export { postType };
