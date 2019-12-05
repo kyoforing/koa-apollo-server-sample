@@ -10,3 +10,7 @@ $ yarn start
 ```
 
 + Step 4: Open http://localhost:8080/graphql
+
+Reference: 
+1. https://www.apollographql.com/docs/apollo-server/
+2. https://github.com/Shopify/graphql-design-tutorial/blob/master/TUTORIAL.md
