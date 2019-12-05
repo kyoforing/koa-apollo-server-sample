@@ -1,71 +1,39 @@
 'use strict';
 
-const Koa = require('koa');
-const helmet = require('koa-helmet');
-const cors = require('koa-cors');
 const dotenv = require('dotenv');
-const { ApolloServer, gql } = require('apollo-server-koa');
-const graphqlLog = require('./lib/logging');
-
 const env = process.env.NODE_ENV || 'development';
-const app = new Koa();
-
 dotenv.config({ path: `.env.${env}` });
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+const Koa = require('koa');
+const helmet = require('koa-helmet');
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
+const { ApolloServer, gql } = require('apollo-server-koa');
+const { typeDefs } = require("./typeDefs");
+const { resolvers } = require("./resolvers");
+const { gqlLogger, userLogger } = require('./lib/logger');
+const { cors } = require('./lib/cors');
 
-// API Log setting
-app.use(graphqlLog.koa_morgan((tokens, req, res) => graphqlLog.logger(tokens, req, res)));
+const app = new Koa();
 
-// CORS setting
-const options = {
-  origin: function(ctx) {
-      let origin = ctx.req.headers.origin || '';
-      let allowDomain: string = 'http://localhost:8080';
-      let whiteList = [];
+// API Logger
+app.use(userLogger());
 
-      //Multiple CORS domain
-      whiteList = process.env.WHITE_LIST.split(',');
-
-      whiteList.forEach(domain => {
-          if (origin.includes(domain)) {
-              allowDomain = origin;
-          }
-      });
-
-      return allowDomain;
-  },
-  allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
-  credentials: true,
-  methods: ['GET', 'PUT', 'POST', 'DELETE']
-};
-app.use(cors(options));
+// CORS
+app.use(cors());
 
 // Security setting
 app.use(helmet());
 app.use(helmet.noCache());
 app.use(async (ctx, next) => {
-    ctx.set('Strict-Transport-Security', 'max-age=15552000');
-    await next();
+  ctx.set('Strict-Transport-Security', 'max-age=15552000');
+  await next();
 });
 
 // Init GraphQL Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  extensions: [() => new graphqlLog.BasicLogging()],
+  extensions: [() => new gqlLogger()],
 });
 
 server.applyMiddleware({ app });

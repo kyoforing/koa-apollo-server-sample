@@ -1,4 +1,12 @@
-# koa-apollo-server-sample
+## GraphQL Sample by apollo-server-koa
 ## Getting started
++ Step 1: edit .env.development to set your database config
++ Step 2: execute default.sql to create default table
++ Step 3: run follow command in cli
 
-🚧施工中🚧
+```sh
+$ yarn
+$ yarn start
+```
+
++ Step 4: Open http://localhost:8080/graphql
