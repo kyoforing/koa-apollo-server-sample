@@ -9,7 +9,8 @@ $ yarn
 $ yarn start
 ```
 
-+ Step 4: Open http://localhost:8080/graphql
++ Step 4: Open http://localhost:8080/graphql to query data
++ Step 5: Open http://localhost:8080/voyager to represent GraphQL API as an interactive graph
 
 slight front-end demo
 https://codesandbox.io/s/mystifying-ellis-863oe

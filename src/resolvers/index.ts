@@ -9,6 +9,11 @@ const allResolver = {
     __resolveType() {
       return null; 
     }
+  },
+  MutationResponse: {
+    __resolveType() {
+      return null; 
+    }
   }
 }
 
