@@ -7,7 +7,7 @@ const postType = gql`
     text: String
     replies: [Reply!]
     author: Author,
-    status: CollectionPostStatus
+    status: CollectionPostStatus @deprecated (reason: "No longer supported")
   }
 
   type Posts {
@@ -15,17 +15,17 @@ const postType = gql`
     list: [Post!]
   }
 
-  type PostCreatePayload {
+  type PostCreatePayload implements MutationResponse {
     userErrors: [UserError!]!
     post: Post
   }
 
-  type PostUpdatePayload {
+  type PostUpdatePayload implements MutationResponse {
     userErrors: [UserError!]!
     post: Post
   }
 
-  type PostDeletePayload {
+  type PostDeletePayload implements MutationResponse {
     userErrors: [UserError!]!
     status: String
   }

@@ -4,7 +4,7 @@ const authorType = gql`
   type Author implements Node {
     id: ID!
     "作者名稱"
-    name: String
+    name: String @upper
     "文章列表"
     postCount: Int
     posts: [Post!]
@@ -15,17 +15,17 @@ const authorType = gql`
     list: [Author!]
   }
 
-  type AuthorCreatePayload {
+  type AuthorCreatePayload implements MutationResponse {
     userErrors: [UserError!]!
     author: Author
   }
 
-  type AuthorUpdatePayload {
+  type AuthorUpdatePayload implements MutationResponse {
     userErrors: [UserError!]!
     author: Author
   }  
 
-  type AuthorDeletePayload {
+  type AuthorDeletePayload implements MutationResponse {
     userErrors: [UserError!]!
     status: String
   }      

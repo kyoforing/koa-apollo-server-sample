@@ -8,8 +8,11 @@ const scalar = gql`
 `;
 
 const query = gql`
+  directive @upper on FIELD_DEFINITION
+  directive @auth(requires: Role) on OBJECT | FIELD_DEFINITION
+
   type Query {
-    author(author_id: ID!): Author
+    author(author_id: ID!): Author @auth(requires: USER)
     authors(limit: Int, page: Int): Authors
     post(post_id: ID!): Post
     posts(limit: Int, page: Int): Posts
@@ -18,8 +21,8 @@ const query = gql`
 `;
 
 const mutation = gql`
-  type Mutation {
-    authorCreate(input: AuthorInput!): AuthorCreatePayload
+  type Mutation {    
+    authorCreate(input: AuthorInput!, token: String!): AuthorCreatePayload
     authorUpdate(author_id: ID!, input: AuthorInput!): AuthorUpdatePayload
     authorDelete(author_id: ID!): AuthorDeletePayload
     postCreate(author_id: ID!, input: PostInput!): PostCreatePayload
@@ -42,13 +45,23 @@ const publicType = gql`
   }
 `;
 
-const publicIFace = gql`
+const publicGql = gql`
   interface Node {
     id: ID!
   }
+
+  interface MutationResponse {
+    userErrors: [UserError!]!
+  }
+
+  enum Role {
+    ADMIN
+    REVIEWER
+    USER
+  }
 `;
 
-const typeDefs = [query, mutation, scalar, publicIFace,
+const typeDefs = [query, mutation, scalar, publicGql,
   publicType, postType, replyType, authorType];
 
 export { typeDefs }

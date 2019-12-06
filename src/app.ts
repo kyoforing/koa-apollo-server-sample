@@ -6,14 +6,20 @@ dotenv.config({ path: `.env.${env}` });
 
 const Koa = require('koa');
 const helmet = require('koa-helmet');
+const koaRouter = require('koa-router');
 
 const { ApolloServer, gql } = require('apollo-server-koa');
 const { typeDefs } = require("./typeDefs");
 const { resolvers } = require("./resolvers");
 const { gqlLogger, userLogger } = require('./lib/logger');
 const { cors } = require('./lib/cors');
+const { UpperCaseDirective, AuthDirective } = require('./lib/helper');
+const { koa: voyagerMiddleware } = require('graphql-voyager/middleware');
+const depthLimit = require('graphql-depth-limit');
+const costAnalysis = require('graphql-cost-analysis').default;
 
 const app = new Koa();
+const router = new koaRouter();
 
 // API Logger
 app.use(userLogger());
@@ -33,8 +39,39 @@ app.use(async (ctx, next) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  validationRules: [ 
+    depthLimit(5),
+    costAnalysis({
+      defaultCost: 1,
+      maximumCost: 200,
+    }),
+  ],
   extensions: [() => new gqlLogger()],
+  schemaDirectives: {
+    upper: UpperCaseDirective,
+    auth: AuthDirective
+  },
+  context: ({ ctx }) => {
+    const token = ctx.headers.authorization || '';
+    //const user = getUser(token);
+    //if (!user) throw new Error('you must be logged in'); 
+    const user = {
+      id: 12345,
+      roles: ['USER', 'ADMIN']
+    }
+ 
+    return { user };
+  },
+  // 若 NODE_ENV=production 則自動為 fasle，防止外人查看 schema
+  // introspection: false,
+  // playground: false
 });
+
+router.all('/voyager', voyagerMiddleware({
+  endpointUrl: '/graphql'
+}));
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 server.applyMiddleware({ app });
 app.listen({ port: 8080 }, () =>
