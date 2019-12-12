@@ -9,16 +9,16 @@ const loaders = {
 
 const postResolver = {
   Query: {
-    post: (_source, { post_id }) => getPost(post_id), //Promise or Object
-    posts: (_source, { limit, page }) => getPosts(limit, page),
+    post: (_parent, { post_id }) => getPost(post_id), //Promise or Object
+    posts: (_parent, { limit, page }) => getPosts(limit, page),
   },
   Mutation: {
-    postCreate: (_source, { author_id, input }) => {
+    postCreate: (_parent, { author_id, input }) => {
       loaders.postsByAuthor.clear(+author_id); //Clear DataLoader cache
       loaders.postCountByAuthor.clear(+author_id); //Clear DataLoader cache
       return createPost(author_id, input)
     },
-    postUpdate: async (_source, { post_id, input }) => {
+    postUpdate: async (_parent, { post_id, input }) => {
       let currPost = await getPost(post_id);
 
       if (currPost) {
@@ -28,7 +28,7 @@ const postResolver = {
 
       return updatePost(post_id, input);
     },
-    postDelete: async (_source, { post_id }) => {
+    postDelete: async (_parent, { post_id }) => {
       let currPost = await getPost(post_id);
 
       if (currPost) {
@@ -40,22 +40,22 @@ const postResolver = {
     },
   },
   Post: {
-    author: (obj) => getAuthor(obj.author_id),
-    replies: (obj) => getReplies(obj.id),
+    author: (_parent) => getAuthor(_parent.author_id),
+    replies: (_parent) => getReplies(_parent.id),
   },
   Author: {
-    postCount: (obj) => loaders.postCountByAuthor.load(obj.id),
-    posts: (obj) => loaders.postsByAuthor.load(obj.id)   //Load DataLoader cache
+    postCount: (_parent) => loaders.postCountByAuthor.load(_parent.id),
+    posts: (_parent) => loaders.postsByAuthor.load(_parent.id)   //Load DataLoader cache
     //posts: (obj) => getPostsByAuthor(obj.author_id),
   }
 };
 
 const replyResolver = {
   Query: {
-    replies: (_source) => getReplies(),
+    replies: (_parent) => getReplies(),
   },
   Reply: {
-    author: (obj) => getAuthor(obj.id),
+    author: (_parent) => getAuthor(_parent.id),
   }
 };
 

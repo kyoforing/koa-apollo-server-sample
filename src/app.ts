@@ -6,9 +6,9 @@ dotenv.config({ path: `.env.${env}` });
 
 const Koa = require('koa');
 const helmet = require('koa-helmet');
-const koaRouter = require('koa-router');
+const Router = require('koa-router');
 
-const { ApolloServer, gql } = require('apollo-server-koa');
+const { ApolloServer } = require('apollo-server-koa');
 const { typeDefs } = require("./typeDefs");
 const { resolvers } = require("./resolvers");
 const { gqlLogger, userLogger } = require('./lib/logger');
@@ -17,9 +17,10 @@ const { UpperCaseDirective, AuthDirective } = require('./lib/helper');
 const { koa: voyagerMiddleware } = require('graphql-voyager/middleware');
 const depthLimit = require('graphql-depth-limit');
 const costAnalysis = require('graphql-cost-analysis').default;
+const api = require('./router/api');
 
 const app = new Koa();
-const router = new koaRouter();
+const route = new Router();
 
 // API Logger
 app.use(userLogger());
@@ -67,11 +68,13 @@ const server = new ApolloServer({
   // playground: false
 });
 
-router.all('/voyager', voyagerMiddleware({
+route.all('/voyager', voyagerMiddleware({
   endpointUrl: '/graphql'
 }));
-app.use(router.routes());
-app.use(router.allowedMethods());
+
+app.use(api.routes());
+app.use(route.routes());
+app.use(route.allowedMethods());
 
 server.applyMiddleware({ app });
 app.listen({ port: 8080 }, () =>

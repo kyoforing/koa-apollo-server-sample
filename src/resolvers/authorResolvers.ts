@@ -2,13 +2,13 @@ const { getAuthor, getAuthors, createAuthor, updateAuthor, deleteAuthor } = requ
 
 const authorResolver = { 
   Query: {
-    author: (_source, { author_id }) => getAuthor(author_id), //Promise or Object
-    authors: (_source, { limit, page }) => getAuthors(limit, page),
+    author: (_parent, { author_id }) => getAuthor(author_id), //Promise or Object
+    authors: (_parent, { limit, page }) => getAuthors(limit, page),
   },
   Mutation: {
-    authorCreate: (_source, { input }) => createAuthor(input),
-    authorUpdate: (_source, { author_id, input} ) => updateAuthor(author_id, input),
-    authorDelete: (_source, { author_id }) => deleteAuthor(author_id),
+    authorCreate: (_parent, { input }) => createAuthor(input),
+    authorUpdate: (_parent, { author_id, input} ) => updateAuthor(author_id, input),
+    authorDelete: (_parent, { author_id }) => deleteAuthor(author_id),
   }
 };
 

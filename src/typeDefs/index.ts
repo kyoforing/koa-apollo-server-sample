@@ -22,7 +22,7 @@ const query = gql`
 
 const mutation = gql`
   type Mutation {    
-    authorCreate(input: AuthorInput!, token: String!): AuthorCreatePayload
+    authorCreate(input: AuthorInput!): AuthorCreatePayload
     authorUpdate(author_id: ID!, input: AuthorInput!): AuthorUpdatePayload
     authorDelete(author_id: ID!): AuthorDeletePayload
     postCreate(author_id: ID!, input: PostInput!): PostCreatePayload
@@ -37,7 +37,7 @@ const publicType = gql`
     field: [String!] # Path to input field which caused the error.
   }
 
-  type pagination {
+  type Pagination {
     page: Int
     pages: Int
     count: Int
