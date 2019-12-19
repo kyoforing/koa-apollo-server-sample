@@ -6,12 +6,12 @@ const postType = gql`
     title: String
     text: String
     replies: [Reply!]
-    author: Author,
+    author: Author
     status: CollectionPostStatus @deprecated (reason: "No longer supported")
   }
 
   type Posts {
-    page: pagination
+    page: Pagination
     list: [Post!]
   }
 

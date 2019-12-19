@@ -16,9 +16,12 @@ const getPost = async post_id => {
   return post;
 };
 
-const getPosts = async (limit = 10, page = 1) => {
+const getPosts = async (limit = 10, page = 1, text) => {
   let postsSql = knex('posts')
     .select(knex.raw('count(1) AS count'));
+
+  if (text) postsSql.whereRaw(`title like '%${text}%' OR text like '%${text}%'`);
+  
   let postCount = await postsSql
     .then(rows => rows.length > 0 ? rows[0].count : 0)
     .catch(error => { throw error });
@@ -41,8 +44,8 @@ const getPosts = async (limit = 10, page = 1) => {
     .select('title')
     .select('text')
     .select('status')
-    .limit(limit)
-    .offset(offset);
+
+  if (limit) postsSql.limit(limit).offset(offset);
 
   let posts = await postsSql
     .then(rows => rows)

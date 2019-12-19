@@ -12,9 +12,12 @@ const getAuthor = async author_id => {
   return author;
 };
 
-const getAuthors = async (limit = 10, page = 1) => {
+const getAuthors = async (limit = 10, page = 1, text) => {
   let authorsSql = knex('authors')
     .select(knex.raw('count(1) AS count'));
+
+  if (text) authorsSql.whereRaw(`name like '%${text}%'`)
+
   let authorCount = await authorsSql
     .then(rows => rows.length > 0 ? rows[0].count : 0)
     .catch(error => { throw error });
@@ -32,9 +35,8 @@ const getAuthors = async (limit = 10, page = 1) => {
   authorsSql
     .clearSelect()
     .select({ id: 'author_id' })
-    .select('name')
-    .limit(limit)
-    .offset(offset);
+    .select('name');
+  if (limit) authorsSql.limit(limit).offset(offset);
 
   let authors = await authorsSql
     .then(rows => rows)

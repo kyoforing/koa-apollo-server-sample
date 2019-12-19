@@ -14,6 +14,14 @@ const allResolver = {
     __resolveType() {
       return null; 
     }
+  },
+  FullSearchResult: {
+    __resolveType(obj) {
+      if (obj.name) return 'Author';
+      if (obj.title || obj.text) return 'Post';
+
+      return null;
+    }
   }
 }
 

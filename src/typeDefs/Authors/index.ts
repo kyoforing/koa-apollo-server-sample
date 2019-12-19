@@ -11,7 +11,7 @@ const authorType = gql`
   }
 
   type Authors {
-    page: pagination
+    page: Pagination
     list: [Author!]
   }
 
