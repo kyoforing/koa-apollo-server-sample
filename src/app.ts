@@ -63,6 +63,9 @@ const server = new ApolloServer({
  
     return { user };
   },
+  engine: {
+    apiKey: process.env.ENGINE_API_KEY
+  }
   // 若 NODE_ENV=production 則自動為 fasle，防止外人查看 schema
   // introspection: false,
   // playground: false

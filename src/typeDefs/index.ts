@@ -17,6 +17,7 @@ const query = gql`
     post(post_id: ID!): Post
     posts(limit: Int, page: Int): Posts
     replies: [Reply]
+    search(text: String!): [FullSearchResult!]
   }
 `;
 
@@ -54,6 +55,8 @@ const publicGql = gql`
     userErrors: [UserError!]!
   }
 
+  union FullSearchResult = Post | Author
+  
   enum Role {
     ADMIN
     REVIEWER
